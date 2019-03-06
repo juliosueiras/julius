@@ -14,8 +14,17 @@ matrix:
   - os: osx
     compiler: clang
     env: SDL_LIB=SDL2-2.0.9 SDL_MIXER_LIB=SDL2_mixer-2.0.4
+  - os: linux
+    name: PS Vita
+    env: VITA_BUILD=true
+    services:
+      - docker
 
-install: true
+install:
+  - if [ "VITA_BUILD" = true ];
+    then
+      docker create --name vitasdk -v "${TRAVIS_BUILD_DIR}:/build/git" gnuton/vitasdk-docker
+    fi
 
 cache:
   directories:
@@ -47,15 +56,28 @@ before_install:
     sudo make install;
     cd ../..;
   }
-- install_sdl_lib $SDL_LIB
-- install_sdl_lib $SDL_MIXER_LIB
+- if [ "VITA_BUILD" != true ];
+  then
+    install_sdl_lib $SDL_LIB
+    install_sdl_lib $SDL_MIXER_LIB
+  fi
 
 before_script:
-  - mkdir build && cd build && cmake ..
+  - if [ "VITA_BUILD" != true ];
+    then
+      mkdir build && cd build && cmake ..
+    else
+      docker exec -v "${TRAVIS_BUILD_DIR}:/build/git" vitasdk /bin/bash -c "mkdir build && cd build && cmake .."
+    fi
 
 script:
-  - make
-  - make test
+  - if [ "VITA_BUILD" != true ];
+    then
+      make
+      make test
+    else
+      docker exec -v "${TRAVIS_BUILD_DIR}:/build/git" vitasdk /bin/bash -c "make"
+    fi
 
 after_success:
   - if [ $RUN_CODECOV ];
