@@ -55,7 +55,7 @@ before_install:
       make;
       sudo make install;
       cd ../..;
-    }
+      }
   - if [ ! $VITA_BUILD = true ];
     then
       install_sdl_lib $SDL_LIB
