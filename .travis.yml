@@ -46,7 +46,7 @@ before_install:
     make;
     sudo make install;
     cd ../..;
-  }
+    }
 - install_sdl_lib $SDL_LIB
 - install_sdl_lib $SDL_MIXER_LIB
 
