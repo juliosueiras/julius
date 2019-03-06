@@ -21,7 +21,7 @@ matrix:
       - docker
 
 install:
-  - if [ "VITA_BUILD" = true ];
+  - if [ $VITA_BUILD = true ];
     then
       docker create --name vitasdk -v "${TRAVIS_BUILD_DIR}:/build/git" gnuton/vitasdk-docker
     fi
@@ -56,14 +56,14 @@ before_install:
     sudo make install;
     cd ../..;
   }
-- if [ ! "VITA_BUILD" = true ];
+- if [ ! $VITA_BUILD = true ];
   then
     install_sdl_lib $SDL_LIB
     install_sdl_lib $SDL_MIXER_LIB
   fi
 
 before_script:
-  - if [ ! "VITA_BUILD" = true ];
+  - if [ ! $VITA_BUILD = true ];
     then
       mkdir build && cd build && cmake ..
     else
@@ -71,7 +71,7 @@ before_script:
     fi
 
 script:
-  - if [ ! "VITA_BUILD" = true ];
+  - if [ ! $VITA_BUILD = true ];
     then
       make
       make test
