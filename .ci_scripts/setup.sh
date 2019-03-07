@@ -10,13 +10,13 @@ travis_retry() {
   [ $result -eq 0 ] && break
   count=$(($count + 1))
   sleep 1
-done
+  done
 
-[ $count -gt 3 ] && {
-  echo -e "\n${ANSI_RED}The command \"$@\" failed 3 times.${ANSI_RESET}\n" >&2
-}
+  [ $count -gt 3 ] && {
+    echo -e "\n${ANSI_RED}The command \"$@\" failed 3 times.${ANSI_RESET}\n" >&2
+  }
 
-return $result
+  return $result
 }
 
 function install_sdl_lib {
